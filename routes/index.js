@@ -21,7 +21,7 @@ router.get("/", function (req, res, next) {
   res.render("index");
 });
 
-router.get('/profile', isLoggedIn, (req, res) => {
+router.get('/profile', isLoggedIn, async (req, res) => {
   // Render the profile page or handle the profile logic
   res.render('profile'); // Ensure you have a 'profile.ejs' or appropriate view template
 });

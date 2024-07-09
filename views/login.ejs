@@ -1,28 +1,28 @@
 <% include ./partials/header.ejs %>
     <% include ./navbar.ejs %>
 
-        <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+        <div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 bg-no-repeat bg-cover bg-center" style="background-image: url(../images/Screenshot\ 2024-07-10\ 011949.jpg)">
+            <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md backdrop-blur-md bg-opacity-20 text-white bg-white	">
                 <div>
                     <h2 class="text-center text-3xl font-extrabold text-gray-900">Log in to Your Account</h2>
                 </div>
-                <form action="/login" method="POST" class="mt-8 space-y-6">
+                <form action="/login" method="POST" class="mt-8 space-y-6  ">
                     <input type="hidden" name="remember" value="true">
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <label for="email" class="block text-sm font-medium ">Email Address</label>
                         <input id="email" name="email" type="email" autocomplete="email" required
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out">
                     </div>
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <label for="password" class="block text-sm font-medium ">Password</label>
                         <input id="password" name="password" type="password" autocomplete="current-password" required
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out">
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <input id="remember_me" name="remember_me" type="checkbox"
-                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition duration-300 ease-in-out">
-                            <label for="remember_me" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                                class="h-4 w-4 text-zinc-100 focus:ring-indigo-500 border-gray-300 rounded transition duration-300 ease-in-out">
+                            <label for="remember_me" class="ml-2 block text-sm text-gray-100">Remember me</label>
                         </div>
                         <div class="text-sm">
                             <a href="#"

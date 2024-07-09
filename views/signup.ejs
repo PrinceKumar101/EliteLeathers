@@ -1,42 +1,42 @@
 <% include ./partials/header.ejs %>
     <% include ./navbar.ejs %>
-        <div class="z-10   " id="signup-form">
+        <div class="z-10  bg-no-repeat bg-cover bg-center " id="signup-form" style="background-image: url(../images/Screenshot\ 2024-07-10\ 011949.jpg)" >
             <form action="/signup" method="POST"
-                class="bg-white shadow-md rounded px-8 pt-6 pb-8 mx-auto max-w-xl space-y-4 border border-gray-300">
+                class="bg-white shadow-md rounded  px-10 pt-6 pb-8 mx-auto max-w-xl space-y-4 border border-gray-300 backdrop-blur-md bg-opacity-20 text-white bg-white">
                 <div>
-                    <label for="fullname" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <label for="fullname" class="block text-md font-medium text-white">Full Name</label>
                     <input type="text" name="fullname" id="fullname" required autofocus autocomplete="name"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
+                        class="mt-1 block w-full px-3 text-white bg-slate-500 backdrop-blur-md bg-opacity-20 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
                 </div>
                 <div>
-                    <label for="email_id" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <label for="email_id" class="block text-md font-medium text-white">Email Address</label>
                     <input type="email" name="email_id" id="email_id" required autocomplete="email"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
+                        class="mt-1 block w-full px-3 text-white bg-slate-500 backdrop-blur-md bg-opacity-20 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
                 </div>
                 <div>
-                    <label for="contact_number" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                    <label for="contact_number" class="block text-md font-medium text-white">Contact Number</label>
                     <input type="tel" name="contact_number" id="contact_number" required autocomplete="tel"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
+                        class="mt-1 block w-full px-3 text-white bg-slate-500 backdrop-blur-md bg-opacity-20 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
                 </div>
                 <div>
-                    <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                    <label for="gender" class="block text-md font-medium text-white">Gender</label>
                     <select name="gender" id="gender" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
-                        <option value="" disabled selected>Select your gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        class="mt-1 block text-slate-900 bg-slate-900 backdrop-blur-md bg-opacity-20 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500 text-white">
+                        <option class="text-black " value="" disabled selected>Select your gender</option>
+                        <option class="text-black " value="Male">Male</option>
+                        <option class="text-black " value="Female">Female</option>
+                        <option class="text-black " value="Other">Other</option>
                     </select>
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <label for="password" class="block text-sm font-medium text-white">Password</label>
                     <input type="password" name="password" id="password" required autocomplete="new-password"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
+                        class="mt-1 text-white bg-slate-500 backdrop-blur-md bg-opacity-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
                 </div>
                 <div>
-                    <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                    <label for="date_of_birth" class="block text-sm font-medium text-white">Date of Birth</label>
                     <input type="date" name="date_of_birth" id="date_of_birth" required
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
+                        class="mt-1 text-white bg-slate-500 backdrop-blur-md bg-opacity-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out hover:border-indigo-500 focus:border-indigo-500">
                 </div>
                 
                 <div>
@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <button type="submit"
-                        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
+                        class="w-full py-2 px-4 backdrop-blur-md bg-opacity-20 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
                         Sign Up
                     </button>
                 </div>
