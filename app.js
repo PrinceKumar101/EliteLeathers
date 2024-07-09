@@ -15,7 +15,7 @@ require("dotenv").config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./models/users');
 
-mongoose.connect("mongodb+srv://Prince:Prince12@cluster0.q2wsoj8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+mongoose.connect(process.env.URL);
 
 
 var app = express();
