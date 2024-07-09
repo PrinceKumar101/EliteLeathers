@@ -8,7 +8,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
-
+require("dotenv").config();
 
 
 
@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(session({
-  secret: 'yourSecretKey',
+  secret: process.env.EXPRESS_SECRET_KEY,
   resave: false,
   saveUninitialized: false
 }));
