@@ -1,0 +1,31 @@
+<% include ./partials/header.ejs %>
+<% include ./navbar.ejs %>
+
+<form action="/become-seller" method="POST" class="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
+    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+    <input type="text" id="name" name="name" required
+           class="block w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+
+    <label for="bankAccount" class="block mt-4 text-sm font-medium text-gray-700">Bank Account Number:</label>
+    <input type="text" id="bankAccount" name="bankAccount" required
+           class="block w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+
+    <label for="gstNumber" class="block mt-4 text-sm font-medium text-gray-700">GST Number (optional):</label>
+    <input type="text" id="gstNumber" name="gstNumber"
+           class="block w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+
+    <label for="aadharNumber" class="block mt-4 text-sm font-medium text-gray-700">Aadhar Card Number:</label>
+    <input type="text" id="aadharNumber" name="aadharNumber" required
+           class="block w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+
+    <label for="panCard" class="block mt-4 text-sm font-medium text-gray-700">PAN Card Number:</label>
+    <input type="text" id="panCard" name="panCard" required
+           class="block w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
+
+    <input type="submit" value="Submit"
+           class="block mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:bg-blue-600">
+</form>
+
+
+
+<% include ./partials/footer.ejs %>
