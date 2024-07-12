@@ -2,7 +2,8 @@ var express = require("express");
 var router = express.Router();
 
 const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
+const { array } = require("../config/multer");
+const products = require("./products");
 
 const UserSchema = new mongoose.Schema({
   fullname: {
@@ -11,7 +12,8 @@ const UserSchema = new mongoose.Schema({
     trim: true,
   },
   profile_picture: {
-    type: String ,
+    type: Buffer ,
+    default: Buffer.alloc(0),
   },
   email_id: {
     type: String,
@@ -42,30 +44,31 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   address: {
-    street: {
-      type: String,
-    },
-    city: {
-      type: String,
-    },
-    state: {
-      type: String,
-    },
-    postal_code: {
-      type: String,
-      match: [/^\d{5}(-\d{4})?$/, "Please fill a valid postal code"],
-    },
-    country: {
-      type: String,
-    },
+    type: String,
+    default: "",
+
+
   },
   created_at: {
     type: Date,
     default: Date.now,
   },
+  seller:{
+    type: Boolean,
+    default: false,
+  },
+  products: [
+    {
+      type:mongoose.Schema.ObjectId,
+      ref:"Products"
+    }
+  ],
+  cart: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Products",
+  }]
   
 });
 
-UserSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", UserSchema);
