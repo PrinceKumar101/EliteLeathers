@@ -6,9 +6,9 @@ var logger = require('morgan');
 
 const session = require('express-session');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const flash = require('connect-flash');
 require("dotenv").config();
+
 
 
 
@@ -37,9 +37,7 @@ app.use(session({
   saveUninitialized: false
 }));
 
-require('./config/passport-config')(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 app.use(flash());
 app.use((req, res, next) => {
@@ -48,6 +46,9 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
+app.use('/uploads', express.static('uploads'));
+app.use(express.urlencoded({ extended: true }));
+
 
 
 
