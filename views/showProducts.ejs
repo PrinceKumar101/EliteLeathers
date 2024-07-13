@@ -1,0 +1,35 @@
+<% include ./partials/header.ejs %>
+    <% include ./navbar.ejs %>
+
+    <div class="container mx-auto mt-10">
+        <div class="flex justify-center">
+            <div class="w-full lg:w-3/4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Your Products</h2>
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <% if (user.products.length > 0) { %>
+                        <% user.products.forEach(function(item) { %>
+                       
+
+                            <div class="flex items-center border-b border-gray-200 py-4">
+                                <img class="w-36 h-36 object-cover rounded" src="data:image/jpeg;base64,<%= item.image.toString('base64') %>" alt="<%= item.name %>">
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-800"><%= item.name %></h3>
+                                    <p class="text-gray-600">Quantity: <%= item.quantity %></p>
+                                    <p class="text-gray-600">Price: $<%= item.price %></p>
+                                </div>
+                                <div>
+                                        <a href="/products/remove/<%= item._id %>"><button type="submit" class="text-red-500 hover:text-red-700">Remove</button>
+                                            </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                        
+                    <% } else { %>
+                        <p class="text-gray-600">Nothing to sell.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <% include ./partials/header.ejs %>
