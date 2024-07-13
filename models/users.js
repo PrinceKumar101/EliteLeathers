@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique:false,
   },
   profile_picture: {
     type: Buffer ,
@@ -59,7 +60,7 @@ const UserSchema = new mongoose.Schema({
   },
   products: [
     {
-      type:mongoose.Schema.ObjectId,
+      type:mongoose.Schema.Types.ObjectId,
       ref:"Products"
     }
   ],
