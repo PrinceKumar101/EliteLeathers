@@ -20,6 +20,10 @@ const sellerSchema = new mongoose.Schema({
     panCard: {
         type: String,
         required: true
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: "User",
     }
 });
 
