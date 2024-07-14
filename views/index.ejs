@@ -1,10 +1,52 @@
 <% include ./partials/header.ejs %>
     <% include ./navbar.ejs %>
-        <h1 class="text-xl">welcome to our webbbbbbbbbb</h1>
-
-        
-        
-        
+        <% var product_count=products.length; %>
 
 
-        <% include ./partials/footer.ejs %>
+
+        <% if (product_count >= 2) { %>
+            <div class="flex flex-wrap justify-center md:justify-start lg:justify-center xl:justify-start">
+                <% products.forEach(product => {
+                    const discountedPrice = (product.price - (product.price * (product.discount / 100))).toFixed(2);
+                %>
+                    <div class="m-4 w-64 rounded-lg overflow-hidden shadow-lg bg-white h-fit">
+                        <div class="flex justify-center items-center">
+                        <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                            class="w-full h-48 object-cover object-center object-scale-down" alt="<%= product.name %>">
+                            </div>
+                        <div class="p-4 ">
+                            <h3 class="text-xl font-semibold mb-2 capitalize h-12 overflow-hidden">
+                                <%= product.name %>
+                            </h3>
+                            <p class="text-gray-700 mb-2  overflow-hidden">
+                                <%= product.description %>
+                            </p>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600 text-sm">Price: $<%= product.price.toFixed(2) %></span>
+                                <span class="text-green-500 font-semibold">
+                                    <%= product.discount %>% Off
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-semibold text-gray-900">$<%= discountedPrice %></span>
+                                <a href="/add-to-cart/<%= product._id %>" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" title="Add to cart">
+                                    <span><i class="ri-add-circle-line"></i></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="flex justify-center">
+                <img class="w-full" src="/images/Screenshot 2024-07-10 011949.jpg" alt="No products available">
+            </div>
+        <% } %>
+        
+
+
+
+
+
+
+                        <% include ./partials/footer.ejs %>
