@@ -15,13 +15,20 @@ const products = require("../models/products");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  const products = await productModel.find();
-  res.render("index",{products});
+  try{
+    const products = await productModel.find();
+  const user = await userModel.findOne({email : req?.user?.email});
+  res.render("index",{products, user});
+  }
+  catch(err){
+    res.send(err.message);
+
+  }
 });
 
 router.get('/profile', isLoggedIn, async (req, res) => {
   const user = await userModel.findOne({email : req.user.email})
-  .populate("products");
+  .populate("products").populate("cart");
   
   res.render('profile', {user}); 
 });
@@ -88,7 +95,6 @@ router.post("/become-seller",isLoggedIn, async function(req, res, next){
     try {
     const user = await userModel.findOne({ email: req.user.email });
 
-      console.log(user);
         
         // Create new seller record
         let newSeller = await sellerModel.create({
@@ -97,8 +103,8 @@ router.post("/become-seller",isLoggedIn, async function(req, res, next){
             gstNumber:req.body.gstNumber,
             aadharNumber: req.body.aadharNumber,
             panCard: req.body.panCard,
+            user: req.user._id,
         });
-        console.log("first");
         await newSeller.save();
 
         user.seller = true;
@@ -111,11 +117,91 @@ router.post("/become-seller",isLoggedIn, async function(req, res, next){
     }
 });
 
-router.get("/add-to-cart/:id", isLoggedIn, async function(req, res,next){
-  const user = await userModel.findOne({ email: req.user.email });
-  
+router.get("/add-to-cart/:product_id", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    const productId = req.params.product_id;
+
+
+    user.cart.push(productId);
+    await user.save();
+    res.redirect("/");
+    
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get("/show/cart", isLoggedIn, async function(req, res, next){
+  const user = await userModel.findOne({email : req.user.email})
+  .populate("cart");
+  res.render("cart",{user});
 
 });
+
+
+router.get("/show/products", isLoggedIn, async function(req, res, next){
+  const user = await userModel.findOne({email : req.user.email})
+  .populate("products");
+  res.render("showProducts",{user});
+
+});
+
+
+router.get("/cart/remove/:itemId", isLoggedIn, async function(req, res, next) {
+  try {
+    const user = await userModel.findOne({ email: req.user.email })
+    .populate("cart");
+    
+    const productIdToRemove = req.params.itemId; 
+    if (!productIdToRemove) {
+      return res.status(400).send("Invalid product ID");
+    }
+
+    user.cart = user.cart.pull({_id:productIdToRemove});
+    await user.save();
+
+
+    res.redirect("/show/cart");
+  } catch (err) {
+    console.error("Error removing product from cart:", err);
+    res.status(500).send("Failed to remove product from cart");
+  }
+});
+
+router.get("/products/remove/:itemId", isLoggedIn,async function(req, res, next){
+  try{
+    const user = await userModel.findOne({email: req.user.email})
+    .populate("products");
+    const products = await productModel.find({user : req.user._id});
+
+    let productIdToRemove = req.params.itemId;
+    if(!productIdToRemove){
+      return res.send("Invalid product Id to remove");
+    }
+    await productModel.findByIdAndDelete(productIdToRemove);
+    await user.products.pull({_id : productIdToRemove});
+
+    await user.save();
+
+    res.redirect("/show/products");
+
+
+  }
+  catch(err){
+    res.send(err.message);
+
+  }
+})
+
+
+
+
+
 
 
   
