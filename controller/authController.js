@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const flash = require("connect-flash");
 
 const upload = require("../config/multer");
 const { v4: uuidv4 } = require("uuid");
@@ -60,17 +61,20 @@ module.exports.registerUser =  ( async function (req, res, next) {
   
       if (!user) {
         console.log("User not found");
-        return res.send("Invalid email or password");
+        req.flash('message', 'user not found');
+        return res.redirect("/");
       }
   
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
         const token = generateToken(user);
         res.cookie("token", token, { httpOnly: true });
+        req.flash("message", "Login succesfull")
         return res.redirect('/profile');
       } else {
-        console.log("Password does not match");
-        return res.send("Invalid email or password");
+        req.flash("message", "Invalid email or password");
+        return res.redirect("/");
+        
       }
     } catch (err) {
       console.error("Error during login:", err);
