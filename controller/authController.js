@@ -9,6 +9,7 @@ const userModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {generateToken} = require('../utils/token_generator');
+const { isLoggedIn } = require("../middleware/isLoggedIn");
 
 module.exports.registerUser =  ( async function (req, res, next) {
     try{
@@ -89,4 +90,5 @@ module.exports.registerUser =  ( async function (req, res, next) {
     // Redirect the user to the homepage
     res.redirect("/");
   };
+
   
