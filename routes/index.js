@@ -8,9 +8,9 @@ const userModel = require("../models/users");
 const productModel = require("../models/products");
 const sellerModel = require("../models/seller");
 
-const {registerUser, loginUser, logout} = require("../controller/authController");
+const {registerUser, loginUser, logout,} = require("../controller/authController");
 
-const {isLoggedIn} = require("../middleware/isLoggedIn");
+const {isLoggedIn, checkLogin} = require("../middleware/isLoggedIn");
 const products = require("../models/products");
 
 /* GET home page. */
@@ -18,7 +18,8 @@ router.get("/", async function (req, res, next) {
   try{
     const products = await productModel.find();
   const user = await userModel.findOne({email : req?.user?.email});
-  res.render("index",{products, user, message : req.flash('message'), sucess_message : req.flash('sucess_message')});
+  const if_logged_in =await checkLogin(req);
+  res.render("index",{products, user, message : req.flash('message'), sucess_message : req.flash('sucess_message'), if_logged_in });
   }
   catch(err){
     res.send(err.message);
@@ -29,17 +30,32 @@ router.get("/", async function (req, res, next) {
 router.get('/profile', isLoggedIn, async (req, res) => {
   const user = await userModel.findOne({email : req.user.email})
   .populate("products").populate("cart");
+  const if_logged_in =await checkLogin(req);
   
-  res.render('profile', {user, message: req.flash('message')}); 
+  res.render('profile', {user, message: req.flash('message'), if_logged_in}); 
 });
 
-router.get("/signup", function (req, res, next) {
-  res.render("signup");
+router.get("/edit-profile",isLoggedIn, async function(req, res ,next){
+  try {
+    const user = await userModel.findOne({email : req.user.email});
+  const if_logged_in = await checkLogin(req);
+  res.render("edit-profile.ejs", {user, if_logged_in});
+  } catch (err) {
+    res.send(err.message);
+  }
+});
+
+
+
+router.get("/signup", async function (req, res, next) {
+  const if_logged_in =await checkLogin(req);
+  res.render("signup", {if_logged_in});
 });
 router.post("/signup", registerUser);
 
-router.get("/login", function (req, res, next) {
-  res.render("login");
+router.get("/login", async function (req, res, next) {
+  const if_logged_in =await checkLogin(req);
+  res.render("login", {if_logged_in});
 });
 
 router.post("/login", loginUser);
@@ -52,10 +68,25 @@ router.post("/upl-profile-picture", isLoggedIn,upload.single("upl-img"),async fu
   await user.save();
     res.redirect("/profile");
 
-})
+});
 
-router.get("/add-product",isLoggedIn, function(req, res, next){
-  res.render("addProduct");
+router.get("/delete-profile-picture", isLoggedIn,async function(req,res, next){
+  try {
+    const user = await userModel.findOne({email: req.user.email});
+    user.profile_picture = "";
+  
+  await user.save();
+    res.redirect("/profile");
+  } catch (error) {
+    res.send(error.message)
+    
+  }
+
+});
+
+router.get("/add-product",isLoggedIn, async function(req, res, next){
+  const if_logged_in =await checkLogin(req);
+  res.render("addProduct", {if_logged_in});
 });
 
 router.post("/add-product", isLoggedIn, upload.single("image"), async function(req, res, next){
@@ -141,7 +172,8 @@ router.get("/add-to-cart/:product_id", isLoggedIn, async (req, res, next) => {
 router.get("/show/cart", isLoggedIn, async function(req, res, next){
   const user = await userModel.findOne({email : req.user.email})
   .populate("cart");
-  res.render("cart",{user});
+  const if_logged_in =await checkLogin(req);
+  res.render("cart",{user, if_logged_in});
 
 });
 
@@ -149,7 +181,8 @@ router.get("/show/cart", isLoggedIn, async function(req, res, next){
 router.get("/show/products", isLoggedIn, async function(req, res, next){
   const user = await userModel.findOne({email : req.user.email})
   .populate("products");
-  res.render("showProducts",{user});
+  const if_logged_in =await checkLogin(req);
+  res.render("showProducts",{user, if_logged_in});
 
 });
 
