@@ -28,8 +28,18 @@
           <a href="/" class="text-gray-700 hover:text-gray-900">Home</a>
 
           <a href="/profile" class="text-gray-700 hover:text-gray-900">Profile</a>
-          <a href="/logout" class="text-gray-700 hover:text-gray-900">Logout</a>
-          <a href="/login" class="text-gray-700 hover:text-gray-900">Login</a>
+          <% try {  %>
+            <% if (if_logged_in ) { %>
+            <a href="/logout" class="text-gray-700 hover:text-gray-900">Logout</a>
+        <% } else { %>
+            <a href="/login" class="text-gray-700 hover:text-gray-900">Login</a>
+        <% } %>
+            
+           <% } catch (error) { %>
+            <a href="/login" class="text-gray-700 hover:text-gray-900">Login</a>
+            <a href="/logout" class="text-gray-700 hover:text-gray-900">Logout</a>
+            
+            <% } %>
 
           <a href="/signup" class="text-gray-700 hover:text-gray-900">Signup</a>
 
@@ -41,11 +51,26 @@
         <a href="/" class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Home</a>
         <a href="/profile"
           class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Profile</a>
-        <a href="/logout"
-          class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
 
-        <a href="/login"
+          <% try {  %>
+            <% if (if_logged_in ) { %>
+              <a href="/logout"
+              class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+        <% } else { %>
+          <a href="/login"
           class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+        <% } %>
+            
+           <% } catch (error) { %>
+            <a href="/login"
+          class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+          <a href="/logout"
+          class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+            
+            <% } %>
+        
+
+        
         <a href="/signup"
           class="text-gray-700 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">Signup</a>
 
