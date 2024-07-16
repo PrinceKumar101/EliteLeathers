@@ -18,7 +18,7 @@ router.get("/", async function (req, res, next) {
   try{
     const products = await productModel.find();
   const user = await userModel.findOne({email : req?.user?.email});
-  res.render("index",{products, user});
+  res.render("index",{products, user, message : req.flash('message'), sucess_message : req.flash('sucess_message')});
   }
   catch(err){
     res.send(err.message);
@@ -30,7 +30,7 @@ router.get('/profile', isLoggedIn, async (req, res) => {
   const user = await userModel.findOne({email : req.user.email})
   .populate("products").populate("cart");
   
-  res.render('profile', {user}); 
+  res.render('profile', {user, message: req.flash('message')}); 
 });
 
 router.get("/signup", function (req, res, next) {
@@ -75,6 +75,7 @@ router.post("/add-product", isLoggedIn, upload.single("image"), async function(r
 
       user.products.push(product._id);
       await user.save();
+      req.flash("message", "Product added");
 
       res.redirect("/profile");
     } else {
@@ -128,6 +129,7 @@ router.get("/add-to-cart/:product_id", isLoggedIn, async (req, res, next) => {
 
     user.cart.push(productId);
     await user.save();
+    req.flash("sucess_message", "Added successfully");
     res.redirect("/");
     
   } catch (error) {
