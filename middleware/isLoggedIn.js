@@ -31,3 +31,37 @@ module.exports.isLoggedIn = async function (req, res, next) {
     res.redirect("/");
   }
 };
+
+
+module.exports.checkLogin = async function (req) {
+  try {
+    // Verify the token from cookies
+    let decoded = jwt.verify(req.cookies.token, process.env.JWT_KEYS);
+
+    // Check if the decoded token has the email_id
+    if (!decoded.email_id) {
+      req.flash("error", "Invalid token.");
+      return 0;
+    }
+
+    // Find the user in the database
+    let user = await userModel
+      .findOne({ email_id: decoded.email_id })
+      .select("-password");
+
+    // If the user is not found
+    if (!user) {
+      req.flash("error", "User not found.");
+      return 0;
+    }
+
+    // Attach the user to the request object
+    req.user = user;
+    return 1;
+  } catch (error) {
+    req.flash("error", "Authentication error.");
+    return 0;
+  }
+};
+
+
