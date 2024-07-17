@@ -91,4 +91,41 @@ module.exports.registerUser =  ( async function (req, res, next) {
     res.redirect("/");
   };
 
+  module.exports.change_password = async function(req, res, next) {
+    try {
+      const user = await userModel.findOne({ email: req.user.email });
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      let { old_password, new_password, confirm_new_password } = req.body;
+  
+      const isMatch = await bcrypt.compare(old_password, user.password);
+      console.log(isMatch);
+  
+      if (new_password === confirm_new_password) {
+        console.log("Passwords match");
+        
+        if (isMatch) {
+          console.log("Old password is correct");
+  
+          const salt = await bcrypt.genSalt(10);
+          const hashedNewPassword = await bcrypt.hash(new_password, salt);
+  
+          user.password = hashedNewPassword;
+          await user.save();
+          console.log("Password changed");
+  
+          res.redirect("/edit-profile");
+        } else {
+          res.status(400).send("Old password is incorrect");
+        }
+      } else {
+        res.status(400).send("New passwords do not match");
+      }
+    } catch (err) {
+      res.send(err.message);
+    }
+  };
+
   
