@@ -8,10 +8,12 @@ const userModel = require("../models/users");
 const productModel = require("../models/products");
 const sellerModel = require("../models/seller");
 
-const {registerUser, loginUser, logout,} = require("../controller/authController");
+const {registerUser, loginUser, logout, change_password,} = require("../controller/authController");
 
 const {isLoggedIn, checkLogin} = require("../middleware/isLoggedIn");
 const products = require("../models/products");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken"); 
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
@@ -44,6 +46,26 @@ router.get("/edit-profile",isLoggedIn, async function(req, res ,next){
     res.send(err.message);
   }
 });
+router.post("/edit-profile", isLoggedIn, async function(req,res, nex){
+  try {
+    const user = await userModel.findOne({ email: req.user.email });
+    let { username, email_id, contact_number, address } = req.body;
+    const updated_data = { username, email_id, contact_number, address };
+    for (let key in updated_data) {
+      if (updated_data[key].length > 3) {
+        if (updated_data[key] && updated_data[key] !== user[key]) {
+          user[key] = updated_data[key];
+        }
+      }
+    }
+    await user.save();
+    res.redirect("/profile");
+  } catch (err) {
+    res.send(err.message);
+  }
+});
+
+router.post("/change-password", isLoggedIn, change_password);
 
 
 
@@ -72,14 +94,15 @@ router.post("/upl-profile-picture", isLoggedIn,upload.single("upl-img"),async fu
 
 router.get("/delete-profile-picture", isLoggedIn,async function(req,res, next){
   try {
-    const user = await userModel.findOne({email: req.user.email});
+    const user = await userModel.findOne({ email: req.user.email });
     user.profile_picture = "";
-  
-  await user.save();
-    res.redirect("/profile");
+
+    await user.save();
+    req.flash("message" , "Sucessfully removed")
+    res.redirect("/profile", );
   } catch (error) {
-    res.send(error.message)
     
+    res.redirect("/edit-profile",{ message: req.flash(error.message)} );
   }
 
 });
