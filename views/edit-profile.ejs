@@ -1,66 +1,37 @@
 <% include ./partials/header.ejs %>
+   
     <div class="mb-5">
         <% include ./navbar.ejs %>
     </div>
-
-    <div class="main m-0 p-0 bg-white/80 hidden">
-        <div class="container mx-auto p-6">
-            <div class=" p-6 rounded-lg  w-1/2">
-                <h2 class="text-2xl font-bold mb-6">Edit Profile</h2>
-
-                <form action="/users/edit-profile" method="POST" class="space-y-4">
-                    <div
-                        class="relative w-72 h-72 bg-white shadow-lg rounded-full overflow-hidden border border-gray-300">
-
-                        <div class="hidden">
-                            <form id="prof-upl-form" action="/upl-profile-picture" hidden method="post"
-                                enctype="multipart/form-data">
-                                <input type="file" name="upl-img" />
-                            </form>
-                        </div>
-
-                        <img class="w-full h-full object-cover bg-center"
-                            src="data:image/jpeg;base64,<%= user.profile_picture.toString('base64') %>"
-                            alt="Profile Picture" />
-                        <span id="uploadicon"
-                            class="absolute bottom-6 right-10 h-14 w-14 flex justify-center items-center bg-gray-200 rounded-full cursor-pointer hover:bg-gray-300">
-                            <i class="ri-pencil-fill"></i>
-                        </span>
-                    </div>
-                    <div>
-                        <label for="email_id" class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" id="email_id" name="email_id" placeholder="<%= user.email_id %>"
-                            class="mt-1 block w-full p-2 border border-gray-100 rounded-md shadow-sm">
-                    </div>
-                    <div>
-                        <label for="contact_number" class="block text-sm font-medium text-gray-700">Contact
-                            Number</label>
-                        <input type="text" id="contact_number" name="contact_number"
-                            placeholder="<%= user.contact_number %>"
-                            class="mt-1 block w-full p-2 border border-gray-100 rounded-md shadow-sm">
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" id="password" name="password"
-                            class="mt-1 block w-full p-2 border border-gray-100 rounded-md shadow-sm">
-                    </div>
-                    <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                        <textarea id="address" name="address"
-                            class="mt-1 block w-full p-2 border border-gray-100 rounded-md shadow-sm"><%= user.address %></textarea>
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md">Save
-                            Changes</button>
-                    </div>
-                </form>
+    <div id="change-pass-form" class="z-50 border border-gray-800 shadow-lg backdrop-blur-md bg-white bg-opacity-90 p-6 rounded-lg hidden">
+        <div class="mb-4 flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-gray-900">Change Your Password</h2>
+            <div id="change-pass-close-btn" class="cursor-pointer">
+                <img src="https://img.icons8.com/?size=100&id=6483&format=png&color=000000" class="h-6 w-6" alt="Close">
             </div>
         </div>
-
-
+        <form action="/change-password" method="post" class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-2">
+                <label for="old_password" class="text-gray-700">Enter your old password</label>
+                <input class="bg-gray-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    type="password" name="old_password" id="old_password">
+            </div>
+            <div class="flex flex-col space-y-2">
+                <label for="new_password" class="text-gray-700">Enter your new password</label>
+                <input class="bg-gray-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    type="password" name="new_password" id="new_password1">
+                <label for="confirm_new_password" class="text-gray-700">Confirm your new password</label>
+                <input class="bg-gray-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    type="password" name="confirm_new_password" id="new_password2">
+            </div>
+            <div>
+                <input type="submit" value="Save"
+                    class="bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-900 cursor-pointer">
+            </div>
+        </form>
     </div>
-
-    <div class="flex justify-center items-center h-screen bg-gray-100 ">
+    
+    <div id="main" class="flex justify-center items-center h-screen bg-gray-100 ">
         <div class="w-4/5 flex flex-col lg:flex-row  items-center">
             <!-- Left side div with user profile details -->
             <div class="w-full lg:w-3/5 bg-white p-6 rounded-lg shadow-md">
@@ -75,7 +46,7 @@
                         </div>
                     </div>
                     <div class="pl-5 flex flex-col gap-y-4 justify-items-center">
-                        <div class="">
+                        <div class="hidden">
                             <form id="prof-upl-form" action="/upl-profile-picture" method="post"
                                 enctype="multipart/form-data">
                                 <input type="file" name="upl-img" />
@@ -84,17 +55,24 @@
 
                         <p id="prof-upl-btn" class="border border-slate-200 shadow-md p-3 cursor-pointer">Change the
                             photo</p>
-                        <a href="/delete-profile-picture" class="border border-slate-200 shadow-md flex justify-center text-center p-2">
+                        <a href="/delete-profile-picture"
+                            class="border border-slate-200 shadow-md flex justify-center text-center p-2">
                             <p>Delete</p><i class="ri-delete-bin-line text-rose-500 text-2xl pl-2"></i>
                         </a>
                     </div>
                 </div>
-                <div class="profile-details pt-6">
+
+
+
+
+                <div class="change password pt-6">
                     <div class="p-4">
-                        <a href="" class="border border-slate-200 shadow-md p-3 m-4">Change Password</a>
+                        <p id="change-pass-btn" class="border border-slate-200 shadow-md p-3 m-4 w-fit">Change Password
+                        </p>
                     </div>
 
-                    <form>
+
+                    <form action="/edit-profile" method="post">
                         <!-- Form elements for user profile details -->
                         <div class="mb-4">
                             <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -106,8 +84,8 @@
 
                         <!-- Example field -->
                         <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email"
+                            <label for="email_id" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email_id"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="<%= user.email_id %>">
                         </div>
@@ -134,7 +112,7 @@
 
             <!-- Right side div with username, welcome text, and floating image -->
             <div class="hidden lg:block w-full lg:w-2/5 relative bg-slate-200 backdrop-blur-20 bg-opacity-50">
-                <div class="bg-white p-6 rounded-lg shadow-md bg-transparent">
+                <div class="bg-white p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-2">Welcome!</h2>
                     <p class="text-gray-600 text-lg mb-4">Hello, <span class="font-bold text-xl">
                             <%= user.fullname %>
@@ -156,11 +134,26 @@
             .addEventListener("click", function () {
                 document.querySelector("#prof-upl-form input").click();
             });
-            document
+        document
             .querySelector("#prof-upl-form input")
             .addEventListener("change", function () {
                 document.querySelector("#prof-upl-form").submit();
             });
+
+
+        const changePassBtn = document.getElementById('change-pass-btn');
+        const closeFormBtn = document.getElementById('change-pass-close-btn');
+        const changePassForm = document.getElementById('change-pass-form');
+        const mainContent = document.getElementById('main');
+
+        function toggleForm() {
+            changePassForm.classList.toggle('hidden');
+            mainContent.classList.toggle('blur');
+        }
+
+        changePassBtn.addEventListener('click', toggleForm);
+        closeFormBtn.addEventListener('click', toggleForm);
+
     </script>
 
 
