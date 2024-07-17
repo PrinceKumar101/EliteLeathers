@@ -46,6 +46,7 @@ router.get("/edit-profile",isLoggedIn, async function(req, res ,next){
     res.send(err.message);
   }
 });
+
 router.post("/edit-profile", isLoggedIn, async function(req,res, nex){
   try {
     const user = await userModel.findOne({ email: req.user.email });
@@ -66,8 +67,6 @@ router.post("/edit-profile", isLoggedIn, async function(req,res, nex){
 });
 
 router.post("/change-password", isLoggedIn, change_password);
-
-
 
 router.get("/signup", async function (req, res, next) {
   const if_logged_in =await checkLogin(req);
