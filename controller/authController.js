@@ -8,8 +8,11 @@ const passport = require("passport");
 const userModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {generateToken} = require('../utils/token_generator');
-const { isLoggedIn } = require("../middleware/isLoggedIn");
+const {generateToken, resetToken} = require('../utils/token_generator');
+const { checkLogin } = require("../middleware/isLoggedIn");
+const randomstring = require('randomstring');
+const nodemailer = require("nodemailer");
+const { token } = require("morgan");
 
 module.exports.registerUser =  ( async function (req, res, next) {
     try{
@@ -127,5 +130,49 @@ module.exports.registerUser =  ( async function (req, res, next) {
       res.send(err.message);
     }
   };
+
+  module.exports.forgot_password = async function(req, res, next){
+    try {
+      const email = req.body.email;
+      const user = await userModel.findOne({email_id : email});
+      
+      if(user){
+        let token = resetToken(user);
+        
+        var randomString = randomstring.generate({
+          length: 15,
+          charset: ['alphanumeric', '*']
+        });
+      var random_token = randomString + token + randomString;
+      console.log(random_token);
+
+      userModel.findByIdAndUpdate(
+        user._id,
+        { $set: { token: random_token } }, // Update the token field
+        { new: true, useFindAndModify: false } // Options: return the updated document and avoid deprecation warning
+      )
+      .then(updatedUser => {
+        console.log('Token updated successfully:', updatedUser);
+      })
+      .catch(err => {
+        console.error('Error updating token:', err);
+      });
+
+      
+
+        
+      console.log(user);
+
+
+      }else{
+        res.send("no user");
+      }
+      
+      res.redirect("/forgot-password");
+    } catch (err) {
+      res.send(err.message);
+      
+    }
+  }
 
   
