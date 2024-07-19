@@ -67,7 +67,11 @@ const UserSchema = new mongoose.Schema({
   cart: [{
     type: mongoose.Schema.Types.ObjectId,
     ref:"Products",
-  }]
+  }],
+  token: {
+    type:String,
+    default: "",
+  },
   
 });
 
