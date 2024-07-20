@@ -8,7 +8,7 @@ const userModel = require("../models/users");
 const productModel = require("../models/products");
 const sellerModel = require("../models/seller");
 
-const {registerUser, loginUser, logout, change_password,} = require("../controller/authController");
+const {registerUser, loginUser, logout, change_password,forgot_password } = require("../controller/authController");
 
 const {isLoggedIn, checkLogin} = require("../middleware/isLoggedIn");
 const products = require("../models/products");
@@ -67,6 +67,16 @@ router.post("/edit-profile", isLoggedIn, async function(req,res, nex){
 });
 
 router.post("/change-password", isLoggedIn, change_password);
+
+router.get("/forgot-password", async function (req, res, next) {
+  try {
+    const if_logged_in = await checkLogin(req);
+    res.render("forgotPassword", { if_logged_in });
+  } catch (err) {
+    res.send(err.message);
+  }
+});
+router.post("/reset-password",forgot_password);
 
 router.get("/signup", async function (req, res, next) {
   const if_logged_in =await checkLogin(req);
