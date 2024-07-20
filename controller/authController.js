@@ -131,48 +131,28 @@ module.exports.registerUser =  ( async function (req, res, next) {
     }
   };
 
-  module.exports.forgot_password = async function(req, res, next){
+  module.exports.forgot_password = async function (req, res, next) {
     try {
       const email = req.body.email;
-      const user = await userModel.findOne({email_id : email});
-      
+      const user = await userModel.findOne({ email_id: email });
+
       if(user){
-        let token = resetToken(user);
-        
-        var randomString = randomstring.generate({
-          length: 15,
-          charset: ['alphanumeric', '*']
+        random_token = randomstring.generate({
+          charset: 'alphanumeric',
+          length: 20,
         });
-      var random_token = randomString + token + randomString;
-      console.log(random_token);
-
-      userModel.findByIdAndUpdate(
-        user._id,
-        { $set: { token: random_token } }, // Update the token field
-        { new: true, useFindAndModify: false } // Options: return the updated document and avoid deprecation warning
-      )
-      .then(updatedUser => {
-        console.log('Token updated successfully:', updatedUser);
-      })
-      .catch(err => {
-        console.error('Error updating token:', err);
-      });
-
-      
-
+        console.log(random_token);
+        user.token = random_token;
         
-      console.log(user);
-
 
       }else{
-        res.send("no user");
+        res.send("user not found");
       }
-      
+
       res.redirect("/forgot-password");
     } catch (err) {
       res.send(err.message);
-      
     }
-  }
+  };
 
   
