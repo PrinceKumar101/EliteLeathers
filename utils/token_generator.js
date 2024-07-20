@@ -4,3 +4,7 @@ exports.generateToken = (user) => {
 
 };
 
+exports.resetToken = (user) =>{
+    return jwt.sign({id : user._id}, process.env.JWT_KEYS, {expiresIn: 600000});
+};
+
