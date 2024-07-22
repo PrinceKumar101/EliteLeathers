@@ -55,7 +55,7 @@
                                     class="m-4 w-64 rounded-lg overflow-hidden shadow-lg bg-white h-fit backdrop-blur-md bg-opacity-5 bg-white">
                                     
                                     <div class="flex justify-center items-center">
-                                        <img src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
+                                        <img loading="lazy" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>"
                                             class="w-full h-48 object-cover object-center object-scale-down"
                                             alt="<%= product.name %>">
                                     </div>
