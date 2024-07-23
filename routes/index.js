@@ -34,7 +34,7 @@ router.get('/profile', isLoggedIn, async (req, res) => {
   .populate("products").populate("cart");
   const if_logged_in =await checkLogin(req);
   
-  res.render('profile', {user, message: req.flash('message'), if_logged_in}); 
+  res.render('profile', {user, message: req.flash('message'), sucess_message: req.flash('sucess_message'), if_logged_in}); 
 });
 
 router.get("/edit-profile",isLoggedIn, async function(req, res ,next){
@@ -77,6 +77,43 @@ router.get("/forgot-password", async function (req, res, next) {
   }
 });
 router.post("/reset-password",forgot_password);
+
+router.get("/set-new-password?:token", function(req,res,next){
+  const token = req.query.token;
+  res.render("reset-token",{token});
+});
+
+router.post("/set-new-password", async function (req, res, next) {
+  try {
+    const { token, password, confirm_password } = req.body;
+
+    if (!token || !password || !confirm_password) {
+      return res.status(400).send("All fields are required");
+    }
+
+    if (password !== confirm_password) {
+      return res.status(400).send("Passwords do not match");
+    }
+
+    const user = await userModel.findOne({ token: token });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+    user.token = ''; // Clear the token after successful password reset
+    await user.save();
+
+    res.status(200).send("Password updated successfully");
+
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 
 router.get("/signup", async function (req, res, next) {
   const if_logged_in =await checkLogin(req);
@@ -155,30 +192,36 @@ router.get("/become-seller",isLoggedIn, function(req, res, next){
   res.render("seller.ejs")
 });
 
-router.post("/become-seller",isLoggedIn, async function(req, res, next){
-    try {
-    const user = await userModel.findOne({ email: req.user.email });
+router.post("/become-seller", isLoggedIn, async function(req, res, next) {
+  try {
+      const user = await userModel.findOne({ email: req.user.email });
 
-        
-        // Create new seller record
-        let newSeller = await sellerModel.create({
-            name:req.body.name,
-            bankAccount:req.body.bankAccount,
-            gstNumber:req.body.gstNumber,
-            aadharNumber: req.body.aadharNumber,
-            panCard: req.body.panCard,
-            user: req.user._id,
-        });
-        await newSeller.save();
+      if (user) {
+          let newSeller = await sellerModel.create({
+              name: req.body.name,
+              bankAccount: req.body.bankAccount,
+              gstNumber: req.body.gstNumber,
+              aadharNumber: req.body.aadharNumber,
+              panCard: req.body.panCard,
+              user: req.user._id,
+          });
 
-        user.seller = true;
-        await user.save();
+          await newSeller.save();
 
-        res.redirect("/profile");
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error submitting seller application');
-    }
+          user.seller = true;
+          await user.save();
+
+          req.flash("sucess_message", "Congrats on becoming a merchant");
+      } else {
+          req.flash("message", "User not found");
+      }
+
+      res.redirect("/profile");
+  } catch (err) {
+      console.error(err);
+      req.flash("message", "Something went wrong");
+      res.status(500).redirect("/profile");
+  }
 });
 
 router.get("/add-to-cart/:product_id", isLoggedIn, async (req, res, next) => {
