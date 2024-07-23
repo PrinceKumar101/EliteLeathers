@@ -13,6 +13,10 @@ const { checkLogin } = require("../middleware/isLoggedIn");
 const randomstring = require('randomstring');
 const nodemailer = require("nodemailer");
 const { token } = require("morgan");
+const {info} = require("../config/nodemailer");
+
+
+
 
 module.exports.registerUser =  ( async function (req, res, next) {
     try{
@@ -73,7 +77,7 @@ module.exports.registerUser =  ( async function (req, res, next) {
       if (isMatch) {
         const token = generateToken(user);
         res.cookie("token", token, { httpOnly: true });
-        req.flash("message", "Login succesfull")
+        req.flash("sucess_message", "Login succesfull")
         return res.redirect('/profile');
       } else {
         req.flash("message", "Invalid email or password");
@@ -135,18 +139,20 @@ module.exports.registerUser =  ( async function (req, res, next) {
     try {
       const email = req.body.email;
       const user = await userModel.findOne({ email_id: email });
+      console.log(user);
 
       if(user){
         random_token = randomstring.generate({
           charset: 'alphanumeric',
           length: 20,
         });
-        console.log(random_token);
         user.token = random_token;
-        
+        user.token_expire = Date.now();
+        await user.save();
+        info(user.fullname, user.email_id, random_token);
 
       }else{
-        res.send("user not found");
+        return res.send("user not found");
       }
 
       res.redirect("/forgot-password");
