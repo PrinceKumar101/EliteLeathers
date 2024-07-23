@@ -3,7 +3,7 @@ const userModel = require("../models/users");
 
 module.exports.isLoggedIn = async function (req, res, next) {
   if (!req.cookies.token) {
-    req.flash("error", "You need to login first.");
+    req.flash("message", "You must login first.");
     return res.redirect("/");
   }
 
