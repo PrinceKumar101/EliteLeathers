@@ -72,11 +72,6 @@ const UserSchema = new mongoose.Schema({
     type:String,
     default: "",
   },
-  token_expire: 
-  { type: Date, 
-    default: Date.now,
-    expires : '10m'
-  }
   
 });
 
